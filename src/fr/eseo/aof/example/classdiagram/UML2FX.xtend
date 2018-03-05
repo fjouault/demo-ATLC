@@ -96,7 +96,6 @@ class UML2FX {
 				origin <=> name.collect[VPos.TOP]
 			)
 		).constraints[a,l,t| #[
-			t.rectangle.bottomLeft == l.line.center,
 			a._memberEnd.first.type.select(Class).collectTo(Class2Rectangle).a.rectangle_.contains(l.start),
 			a._memberEnd.second.type.select(Class).collectTo(Class2Rectangle).a.rectangle_.contains(l.end),
 			l.start.minimizeDistance(l.end)<> Strength.WEAK
