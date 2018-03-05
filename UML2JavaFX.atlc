@@ -1,0 +1,65 @@
+module UMLClassDiagram2JavaFX; 
+create OUT : JFX from IN : UML;
+
+rule Package2Rectangle {
+    from 
+        p : UML!Package
+    to   
+        r : JFX!Rectangle (
+            fill <- 'lightblue',
+            stroke <- 'black'
+        ),
+        t : JFX!Text (
+            stroke <- 'black',
+            text <- p.name,
+            origin <- #TOP
+        )
+    with { 
+        medium stay r.topLeft suggest {90, 120},
+        weak minimize r.height,
+        weak minimize r.width,
+        t.topLeft = r.topLeft.dx(5),
+        r.width >= 100,
+        r.height >= 100,
+        r contains p.packagedElement
+    }
+}
+
+rule Class2Rectangle {
+    from
+        c : UML!Class
+    to  
+        r : JFX!Rectangle (
+            fill <- 'white',
+            stroke <- 'black'
+        ),
+        t : JFX!Text (
+            stroke <- 'black',
+            text <- c.name,
+            origin <- #TOP
+        )
+    with { 
+        medium stay r.topLeft suggest {350, 350},
+        medium minimize r.height,
+        medium minimize r.width,
+        r.height >= 25,
+        r.width >= t.width,
+        t.topLeft.x = r.topLeft.x,
+        t.topLeft.y = r.topLeft.y + 5,
+        r.bottomRight.y >= t.bottomRight.y
+    }
+}
+
+rule Association2Line {
+    from
+        a : UML!Association
+    to
+        l : JFX!Line (
+            stroke <- 'black'
+        )
+    with {
+        a.first contains l.start,
+        a.second contains l.end,
+        weak l.start minimizeDistance l.end
+    }
+}
